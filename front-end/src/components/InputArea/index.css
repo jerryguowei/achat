@@ -1,0 +1,48 @@
+.input-wrapper {
+    height: 50px;
+    position: relative;
+    width: 100%;
+    background-color: rgb(243, 243, 243);
+    padding: 8px 10px;
+    border-top: 1px solid rgb(243, 243, 243);
+    display: flex;
+    justify-content: center;
+}
+
+.input-wrapper .input-textarea {
+    width: calc(100% - 140px);
+    margin: 0 10px 0 2px;
+    border-radius: 2px;
+    padding: 5px;
+    outline: none;;
+    resize: none;
+    border: 1px solid #fff;
+    font-size: 14px;
+}
+.input-wrapper .btn {
+    width: 60px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ccc;
+    color: #fff;
+    border-radius: 2px;
+    cursor: not-allowed
+}
+
+.input-wrapper .on {
+    background-color: #007bff;
+}
+
+.input-wrapper .icon-area {
+    width: 70px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+
+/* .input-wrapper .text-area{
+    margin: 0 auto;
+} */

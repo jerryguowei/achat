@@ -1,0 +1,27 @@
+.sidebar-wrapper {
+    background-color:rgb(243, 243, 243);
+    text-align: center; 
+    border-right: 1px solid rgb(235,235,235); 
+    flex-basis: 60px;
+    padding: 10px 4px 0;
+}
+
+
+.tab {
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.sidebar-wrapper .unread {
+    display: inline-block;
+    position: absolute;
+    margin-left: -20%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 50%;
+    font-size: 16px;
+    text-align: center;
+    color: white;
+    background-color : red;
+  }

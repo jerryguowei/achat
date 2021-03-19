@@ -1,0 +1,26 @@
+.login-form {
+    border-radius: 12px;
+    max-width: 330px;
+    width: 100%;
+    position: relative;
+    padding: 10px 40px 60px;
+    box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.login-form .active, .login-form .inactive {
+    font-size: 18px;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 10px 10px 20px;
+    color:  #b4b8b9d3;
+}
+
+.login-form .active {
+    color: #66b3ef;
+}
+
+.avatar {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
