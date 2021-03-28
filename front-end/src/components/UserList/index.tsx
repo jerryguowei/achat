@@ -53,7 +53,7 @@ export default class UserList extends Component<UserListDefaultProd, any> {
         }
 
         usrGroupList.sort((a, b) => {
-            return a.id - b.id;
+            return -(a.id - b.id);
         })
         let userArray: Array<JSX.Element> = [];
         usrGroupList.map(item => item.list).forEach(item => userArray.push(item));
