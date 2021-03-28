@@ -18,11 +18,13 @@ public interface UserService {
 	
 	UserDTO findUser(String username);
 	
-	UserRequestDTO addUser(UserRequestDTO addUserRequestDTO, UserDetails userDetails);
-					
-	UserDTO acceptUser(UserRequestDTO addUserRequestDTO, UserDetails userDetails);
+	List<UserDTO> findMatchUser(String username);
 	
-	UserRequestDTO rejectUser(UserRequestDTO addUserRequestDTO, UserDetails userDetails);
+	UserRequestDTO addUser(UserRequestDTO addUserRequestDTO, String loginUsername);
+					
+	UserDTO acceptUser(UserRequestDTO addUserRequestDTO, String loginUsername);
+	
+	UserRequestDTO rejectUser(UserRequestDTO addUserRequestDTO, String loginUsername);
 	
 	UserRequestDTO viewRequest(Long requestId, String loginUsername);
 	

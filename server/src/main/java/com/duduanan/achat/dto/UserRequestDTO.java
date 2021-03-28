@@ -5,7 +5,6 @@ import java.util.Date;
 import com.duduanan.achat.entity.AddUserRequest;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 @JsonInclude(Include.NON_NULL)
@@ -17,11 +16,7 @@ public class UserRequestDTO {
 	private String status;
 	private Integer viewed = 0;
 	private SideType type = SideType.FROM;
-	
-	@JsonProperty("reject_message")
 	private String rejectMessage;
-	
-	@JsonProperty("request_time")
 	private Date requestTime;
 	
 	public UserRequestDTO() {

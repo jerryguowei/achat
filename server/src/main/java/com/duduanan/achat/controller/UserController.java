@@ -52,29 +52,34 @@ public class UserController {
     }
     
     @GetMapping("/find/{username}")
-    public UserDTO searchUser(@PathVariable String username) {
+    public UserDTO findUser(@PathVariable String username) {
     	return userService.findUser(username);
     }
-        
+    
+    @GetMapping("/search/{username}")
+    public List<UserDTO> searchUser(@PathVariable String username) {
+    	return userService.findMatchUser(username);
+    }
+      
     @PostMapping("/add")
     public UserRequestDTO addUser(@Valid @RequestBody UserRequestDTO addUserRequestDTO,
     		@AuthenticationPrincipal UserDetails userDetails) {
     	logger.info("start to add user.");
-    	return userService.addUser(addUserRequestDTO, userDetails);
+    	return userService.addUser(addUserRequestDTO, userDetails.getUsername());
     }
     
     @PostMapping("/accept")
     public UserDTO accpetRequest(@Valid @RequestBody UserRequestDTO addUserRequestDTO, 
     		@AuthenticationPrincipal UserDetails userDetails) {
     	logger.info("start to accept user.");
-    	return userService.acceptUser(addUserRequestDTO, userDetails);
+    	return userService.acceptUser(addUserRequestDTO, userDetails.getUsername());
     }
     
     @PostMapping("/reject")
     public UserRequestDTO rejectRequest(@Valid @RequestBody UserRequestDTO addUserRequestDTO, 
     		@AuthenticationPrincipal UserDetails userDetails) {
     	logger.info("start to reject user.");
-    	return userService.rejectUser(addUserRequestDTO, userDetails);
+    	return userService.rejectUser(addUserRequestDTO, userDetails.getUsername());
     }
     
     @DeleteMapping("/friends/{friendUsername}")

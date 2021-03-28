@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 
 import com.duduanan.achat.dto.InitDTO;
 import com.duduanan.achat.dto.MessageRequestDTO;
+import com.duduanan.achat.dto.SocketUserRequestDTO;
 import com.duduanan.achat.dto.UserMessageDTO;
 import com.duduanan.achat.service.MainService;
 import com.duduanan.achat.service.UserService;
@@ -38,6 +39,8 @@ public class MessageController {
     
     @MessageMapping("/message")
     public void sendMessage(UserMessageDTO message, Principal principal) {
+    	
+    	String messgeString = message.getMessage();
     	userService.sendMessage(message, principal.getName());
     	System.out.println(message);
     }
@@ -61,4 +64,25 @@ public class MessageController {
     	}
     	userService.viewedMessage(messageIds, principal.getName());
     }
+    
+	@MessageMapping("/request")
+	public void dealWithUserRequest(SocketUserRequestDTO socketUserRequestDTO, Principal principal) {
+		try {
+			switch (socketUserRequestDTO.getAction()) {
+			case ACCEPT:
+				userService.acceptUser(socketUserRequestDTO.getUserRequestDTO(), principal.getName());
+				break;
+			case REQUEST:
+				userService.addUser(socketUserRequestDTO.getUserRequestDTO(), principal.getName());
+				break;
+			case REJECT:
+				userService.rejectUser(socketUserRequestDTO.getUserRequestDTO(), principal.getName());
+			default:
+				userService.viewRequest(socketUserRequestDTO.getUserRequestDTO().getId(), principal.getName());
+				break;
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
 }

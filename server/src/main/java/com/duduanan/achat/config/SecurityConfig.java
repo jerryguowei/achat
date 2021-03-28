@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
        
         //.requestMatchers().antMatchers("/actuator/*", "user/register" )
-    	 http.authorizeRequests().antMatchers("/api/user/register", "/*", "/actuator/*", "/static/**", "/manifest.json" ).permitAll()
+    	 http.authorizeRequests().antMatchers("/api/user/register", "/*", "/actuator/*", "/static/**", "/manifest.json", "/files/**" ).permitAll()
                 .and().authorizeRequests().anyRequest().authenticated()
                 .and().csrf().disable().httpBasic()
                 .authenticationEntryPoint(customBasicAuthenticationEntryPoint());    	

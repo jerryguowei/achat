@@ -21,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.duduanan.achat.dto.UserRequestDTO;
+import com.duduanan.achat.dto.message.NoticeFriendDTO;
+import com.duduanan.achat.dto.message.NoticeFriendDTO.NoticeType;
 import com.duduanan.achat.dto.MessageRequestDTO;
 import com.duduanan.achat.dto.UserDTO;
 import com.duduanan.achat.dto.UserMessageDTO;
@@ -30,6 +32,7 @@ import com.duduanan.achat.entity.AddUserRequest;
 import com.duduanan.achat.entity.PrivateMessage;
 import com.duduanan.achat.entity.RequestStatus;
 import com.duduanan.achat.entity.UserInfo;
+import com.duduanan.achat.files.MimeFileUtils;
 import com.duduanan.achat.repository.AddUserRequestRepository;
 import com.duduanan.achat.repository.PrivateMessageRepository;
 import com.duduanan.achat.repository.UserRepository;
@@ -56,6 +59,10 @@ public class DefaultUserService implements UserService {
     
     @Autowired
     private BroadcastService broadcastService;
+    
+    
+    @Autowired
+    private MimeFileUtils mimeFileUtils;
 
 	@Override
 	public UserDTO create(UserRegistractionDTO registractionDTO) {
@@ -97,11 +104,23 @@ public class DefaultUserService implements UserService {
 		  }
 	      return new UserDTO(userInfo);
 	}
+	
+	
+	@Override
+	public List<UserDTO> findMatchUser(String username) {
+		List<UserInfo>  userInfoList = userRepository.findMatchUser(username);
+		if(userInfoList == null) {
+			logger.info("not user found for username: " + username);
+			return new ArrayList<>();
+		}
+				
+		return userInfoList.stream().map(user -> new UserDTO(user)).collect(Collectors.toList());
+	}
 
 	@Override
-	public UserRequestDTO addUser(UserRequestDTO addUserRequestDTO, UserDetails userDetails) {
+	public UserRequestDTO addUser(UserRequestDTO addUserRequestDTO, String loginUsername) {
 		
-		if(userDetails.getUsername().equals(addUserRequestDTO.getToUsername())) {
+		if(loginUsername.equals(addUserRequestDTO.getToUsername())) {
 			throw new IllegalArgumentException("you can't add yourself as friends.");
 		}
 		
@@ -111,10 +130,10 @@ public class DefaultUserService implements UserService {
 			logger.info("username " + targetUserName + " is not found.");
 			throw new UsernameNotFoundException("username " + targetUserName + " is not found.");
 		}
-		UserInfo fromUser = userRepository.findByUsername(userDetails.getUsername());
+		UserInfo fromUser = userRepository.findByUsername(loginUsername);
 		
 		if(fromUser.getFriends().contains(targetUser)) {
-			logger.info("user " + targetUserName + " is already " + userDetails.getUsername() +  " friends.");
+			logger.info("user " + targetUserName + " is already " + loginUsername +  " friends.");
 			throw new IllegalArgumentException("user " + targetUserName + " is already your friends.");
 		}
 		
@@ -126,19 +145,21 @@ public class DefaultUserService implements UserService {
 		fromUser.addSentAddingUserRequest(addUserRequest);
 		targetUser.addReceivedAddingUserRequest(addUserRequest);
 		addUserRequest = addUserRequestRepository.save(addUserRequest);
-		addUserRequestDTO = new UserRequestDTO(addUserRequest, userDetails.getUsername());
+		addUserRequestDTO = new UserRequestDTO(addUserRequest, loginUsername);
 		
 		this.broadcastService.sendAddingUserRequest(addUserRequestDTO.getFromUsername(), Arrays.asList(addUserRequestDTO));
+		
+		addUserRequestDTO = new UserRequestDTO(addUserRequest, targetUser.getUsername());
 		this.broadcastService.sendAddingUserRequest(addUserRequestDTO.getToUsername(), Arrays.asList(addUserRequestDTO));
 		return addUserRequestDTO;
 	}
 
 	@Override
-	public UserDTO acceptUser(UserRequestDTO addUserRequestDTO, UserDetails userDetails) {
+	public UserDTO acceptUser(UserRequestDTO addUserRequestDTO, String loginUsername) {
 		AddUserRequest addUserRequest = addUserRequestRepository.findById(addUserRequestDTO.getId()).orElse(null);
 		if(addUserRequest == null 
 				|| addUserRequest.getStatus() != RequestStatus.PENDING 
-				|| !addUserRequest.getToUser().getUsername().equalsIgnoreCase(userDetails.getUsername())) {
+				|| !addUserRequest.getToUser().getUsername().equalsIgnoreCase(loginUsername)) {
 			throw new IllegalArgumentException("the request is not exist.");
 		}
 		
@@ -148,18 +169,26 @@ public class DefaultUserService implements UserService {
 		addUserRequest.getToUser().addFriends(addUserRequest.getFromUser());
 		userRepository.save(addUserRequest.getToUser());
 		addUserRequestRepository.save(addUserRequest);
-		
+		addUserRequestDTO =  new UserRequestDTO(addUserRequest, addUserRequest.getFromUser().getUsername());
 		this.broadcastService.sendAddingUserRequest(addUserRequest.getFromUser().getUsername(), Arrays.asList(addUserRequestDTO));
+		
+		NoticeFriendDTO noticeFriendDTO = new NoticeFriendDTO(NoticeType.UPDATE, new UserDTO(addUserRequest.getToUser()));
+		this.broadcastService.sendChangeFriend(addUserRequest.getFromUser().getUsername(), noticeFriendDTO);
+		
+		addUserRequestDTO =  new UserRequestDTO(addUserRequest, addUserRequest.getToUser().getUsername());
+		this.broadcastService.sendAddingUserRequest(addUserRequest.getToUser().getUsername(), Arrays.asList(addUserRequestDTO));
+		noticeFriendDTO = new NoticeFriendDTO(NoticeType.UPDATE, new UserDTO(addUserRequest.getFromUser()));
+		this.broadcastService.sendChangeFriend(addUserRequest.getToUser().getUsername(), noticeFriendDTO);
 		
 		return new UserDTO(addUserRequest.getFromUser());
 	}
 
 	@Override
-	public UserRequestDTO rejectUser(UserRequestDTO addUserRequestDTO, UserDetails userDetails) {
+	public UserRequestDTO rejectUser(UserRequestDTO addUserRequestDTO, String loginUsername) {
 		AddUserRequest addUserRequest = addUserRequestRepository.findById(addUserRequestDTO.getId()).orElse(null);
 		if(addUserRequest == null 
 				|| addUserRequest.getStatus() != RequestStatus.PENDING 
-				|| !addUserRequest.getToUser().getUsername().equalsIgnoreCase(userDetails.getUsername())) {
+				|| !addUserRequest.getToUser().getUsername().equalsIgnoreCase(loginUsername)) {
 			throw new IllegalArgumentException("the request is not exist.");
 		}
 		
@@ -168,8 +197,10 @@ public class DefaultUserService implements UserService {
 		addUserRequest.setRejectMessage(addUserRequestDTO.getRejectMessage());
 		addUserRequestRepository.save(addUserRequest);
 		
-		addUserRequestDTO = new UserRequestDTO(addUserRequest, userDetails.getUsername());
+		addUserRequestDTO = new UserRequestDTO(addUserRequest, loginUsername);
 		this.broadcastService.sendAddingUserRequest(addUserRequestDTO.getFromUsername(), Arrays.asList(addUserRequestDTO));
+		
+		addUserRequestDTO = new UserRequestDTO(addUserRequest, addUserRequestDTO.getToUsername());
 		this.broadcastService.sendAddingUserRequest(addUserRequestDTO.getToUsername(), Arrays.asList(addUserRequestDTO));
 		return addUserRequestDTO;
 	}
@@ -190,7 +221,12 @@ public class DefaultUserService implements UserService {
 			return new UserRequestDTO(addUserRequest, loginUsername);
 		}
 		addUserRequest.setViewed(1);
-		addUserRequestRepository.save(addUserRequest);		
+		addUserRequestRepository.save(addUserRequest);
+		
+		UserRequestDTO addUserRequestDTO = new UserRequestDTO(addUserRequest, addUserRequest.getFromUser().getUsername());
+		this.broadcastService.sendAddingUserRequest(addUserRequestDTO.getFromUsername(), Arrays.asList(addUserRequestDTO));
+		addUserRequestDTO = new UserRequestDTO(addUserRequest, addUserRequest.getToUser().getUsername());
+		this.broadcastService.sendAddingUserRequest(addUserRequestDTO.getToUsername(), Arrays.asList(addUserRequestDTO));
 		return new UserRequestDTO(addUserRequest, loginUsername);
 	}
 
@@ -257,12 +293,23 @@ public class DefaultUserService implements UserService {
 			logger.info("username " + loginUsernmae + " is not a friend of " + userMessageDTO.getToUsername());
 			throw new IllegalArgumentException("you are not a friend of " + toUser.getUsername());
 		}
+		String message = userMessageDTO.getMessage();
+		String attachments = userMessageDTO.getAttachments();
+		
+		if(userMessageDTO.getAttachments() != null && !attachments.isEmpty()) {
+			//means it's a binary message.
+			String savedFileName = mimeFileUtils.saveFile(userMessageDTO.getMessage());
+			String fileName = attachments.split(":")[0];
+			String mimeType = mimeFileUtils.extractMimeType(userMessageDTO.getMessage()).getMimeTypeString();
+			attachments = fileName + ":" + mimeType + ":" + savedFileName;
+			message = "$[" + fileName +  "]$";
+		}
 		
 		PrivateMessage privateMessage = new PrivateMessage();
 		privateMessage.setFromUser(fromUser);
 		privateMessage.setToUser(toUser);
-		privateMessage.setMessage(userMessageDTO.getMessage());
-		privateMessage.setAttachments(userMessageDTO.getAttachments());
+		privateMessage.setMessage(message);
+		privateMessage.setAttachments(attachments);
 		privateMessage.setViewed(0);
 		privateMessage.setTime(new Date());
 		
@@ -296,6 +343,10 @@ public class DefaultUserService implements UserService {
 		if(!friend.getFriends().contains(loginUser)) {
 			privateMessageRepository.deleteMessagesBetweenUsers(loginUser.getUserId(), friend.getUserId());
 		}
+			
+		NoticeFriendDTO noticeFriendDTO = new NoticeFriendDTO(NoticeType.REMOVE, new UserDTO(friend));
+		this.broadcastService.sendChangeFriend(userDetails.getUsername(), noticeFriendDTO);
+		
 		return new UserDTO(friend);
 	}
 
@@ -315,5 +366,4 @@ public class DefaultUserService implements UserService {
 		this.broadcastService.sendPrivateMessage(loginUsername, messageDTOs);
 		return messageDTOs;
 	}
-
 }

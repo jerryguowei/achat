@@ -16,3 +16,5 @@ management:
 achat:
    websocket:
       allow-origin: http://localhost:3000
+   chat-file-folder: "F:\\aChat\\chat-file\\"
+      

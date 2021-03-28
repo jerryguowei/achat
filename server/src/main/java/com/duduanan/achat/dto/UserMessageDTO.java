@@ -17,7 +17,7 @@ public class UserMessageDTO {
 	private String toUsername;
 	private String message;
 	@JsonSerialize(nullsUsing = NullStringSerializer.class)
-	private String attachments;
+	private String attachments; //filename:URL
 	private Date time;
 	private Integer viewed = 0;
 		

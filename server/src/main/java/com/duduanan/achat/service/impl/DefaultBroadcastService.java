@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.duduanan.achat.dto.UserRequestDTO;
+import com.duduanan.achat.dto.message.NoticeFriendDTO;
 import com.duduanan.achat.dto.UserMessageDTO;
 import com.duduanan.achat.service.BroadcastService;
 
@@ -24,5 +25,10 @@ public class DefaultBroadcastService implements BroadcastService {
 	@Override
 	public void sendAddingUserRequest(String targetUsername, List<UserRequestDTO> requestList) {
 		this.simpMessagingTemplate.convertAndSendToUser(targetUsername, "/queue/request", requestList);
+	}
+
+	@Override
+	public void sendChangeFriend(String targetUsername, NoticeFriendDTO noticeFriendDTO) {
+		this.simpMessagingTemplate.convertAndSendToUser(targetUsername, "/queue/user", noticeFriendDTO);	
 	}
 }
