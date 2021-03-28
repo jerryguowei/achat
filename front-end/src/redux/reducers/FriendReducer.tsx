@@ -1,6 +1,7 @@
 import { combineReducers } from "redux"
 import { PrivateMessage } from "../../Model/MessageModel";
 import { FriendAllMessages } from "../../Model/StateModel";
+import { UserInfo } from "../../Model/UserInfoModel";
 
 import {FRIEND_TYPE, PRIVATE_MESSAGE_TYPE} from '../actions/friendAction'
 import { LOGIN_TYPE } from "../actions/userAction";
@@ -10,15 +11,28 @@ const friendReducer = (prevState = {} , action:{type:string, payload:any, error?
         case LOGIN_TYPE.LOGOUT:
             return {};
         case FRIEND_TYPE.UPDATE_LIST:
-            return Array.isArray(action.payload) ? 
-                  action.payload.reduce((accumulator, item) => {
-                    accumulator[item.username] = item;
-                    return accumulator;
-                  }, {} )
-            : {};
+            return copeUpdateFriend(action.payload, prevState);
+        case FRIEND_TYPE.REMOVE_LIST:
+            return copeRemoveFriend(action.payload, prevState);
         default: 
             return prevState;
     }
+}
+
+const copeUpdateFriend = (friendList: Array<UserInfo>, prevState: {[username:string]:UserInfo}) => {
+     const newState = Object.assign({}, prevState);
+     for(let friend of friendList){
+        newState[friend.username] = friend;
+     }
+     return newState;
+}
+
+const copeRemoveFriend = (friendList: Array<UserInfo>, prevState: {[username:string]:UserInfo}) => {
+    const newState = Object.assign({}, prevState);
+    for(let friend of friendList){
+        delete newState[friend.username];
+     }
+     return newState;
 }
 
 const messageReducer = (prevState = {}, action : {type:string, payload:any, error?:string}) => {
@@ -29,9 +43,19 @@ const messageReducer = (prevState = {}, action : {type:string, payload:any, erro
             return action.payload ? action.payload : {};
         case PRIVATE_MESSAGE_TYPE.ADD_LIST:
             return copeAddingMessage(action.payload, prevState);
+        case FRIEND_TYPE.REMOVE_LIST:
+            return copeMessageWhenRemoveFriends(action.payload, prevState);
             default:
                 return prevState;
     }
+}
+
+const copeMessageWhenRemoveFriends = (friendList: Array<UserInfo>, prevState: FriendAllMessages= {}) => {
+    const newState = Object.assign({}, prevState);
+    for(let friend of friendList){
+        delete newState[friend.username];
+    }
+    return newState;
 }
 
 function copeAddingMessage (messageList: [PrivateMessage], prevState: FriendAllMessages) {
@@ -47,6 +71,10 @@ function copeAddingMessage (messageList: [PrivateMessage], prevState: FriendAllM
         let existingUserMessages = username in newState ?  newState[username].messageList : []; 
         if(!(username in newState)){
             newState[username] = {"minMsgId": msg.messageId, "messageList" : existingUserMessages};
+        }
+
+        if(newState[username].minMsgId < 0){
+            newState[username].minMsgId =  msg.messageId;
         }
 
         if(existingUserMessages.length === 0){

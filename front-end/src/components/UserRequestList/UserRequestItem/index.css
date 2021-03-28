@@ -1,4 +1,4 @@
-.user-group {
+.request-user-group {
     border-bottom: 1px solid rgb(235,235,235);
     height: 80px;
     display: flex;
@@ -6,48 +6,33 @@
     padding: 10px;
 }
 
-.user-group:hover {
+.urequest-user-group:hover {
     background-color: rgb(235, 235, 235);
 }
-
-.user-group .user-icon {
+.request-user-group .user-icon {
     display: flex;
     align-items: center;
     justify-content: center;
     padding-right: 10px;
 }
-.user-group .name-date {
+.request-user-group .name-date {
   font-size: 14px;
 }
-.user-group .user-content{
+.request-user-group .user-content{
     display: flex;
     flex-direction: column;
     justify-content: center;
     flex: 1;
 }
 
-.user-group .user-date {
+.request-user-group .user-date {
     float: right;
+    right: 8px;
     font-size: 10px;
     overflow: hidden;
 }
 
-.user-group .message {
-    font-size: 10px;
-    overflow: hidden;
-}
-
-.link {
-    text-decoration: none;
-    color: inherit;
-}
-
-.link:hover {
-    text-decoration: none;
-    color: inherit;
-}
-
-.unread {
+.request-user-group .unread {
     display: inline-block;
     margin-top: -30%;
     margin-left: -20%;
@@ -60,3 +45,26 @@
     color: white;
     background-color : red;
   }
+
+  .request-user-group .type-wrapper {
+      font-size: 0.8rem;
+      font-weight: bold;
+  }
+
+  .request-user-group .message-status {
+      font-size: 0.8rem;
+  }
+
+  .request-user-group .message-status .message {
+    font-size: 10px;
+    overflow: hidden;
+    display: inline-block;
+}
+  .request-user-group .message-status .status {
+    float: right;
+
+  }
+  /* .request-user-group .message-status .status::after{
+      content: '';
+      clear: both;
+  } */

@@ -26,6 +26,23 @@
     background-color: #f3f3f3;
 }
 
+.chat-item .other-chat .img-render {
+    float: left;
+    margin-left: 60px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background-color: #f3f3f3;
+}
+
+.chat-item  .my-chat .img-render {
+    float: right;
+    margin-right: 60px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background-color: #f3f3f3;
+}
+
+
 .chat-item .my-chat {
     position: relative;
     width: 100%;
@@ -69,7 +86,7 @@
 
 .chat-item .other-chat .name-time {
     font-size: 14px;
-    left:60px;
+    left:65px;
     top: -26px;
     position: absolute;
     color: #686868;

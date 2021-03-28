@@ -24,3 +24,8 @@
     display: inline-block;
     margin-bottom: 1rem;
 }
+
+
+.login-form .left-auto {
+    left: auto;
+}

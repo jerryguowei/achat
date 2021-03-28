@@ -17,8 +17,6 @@ export default class UserGroup extends React.Component<UserGroupProps, any> {
         let message = this.props.message;
         message = message ? message : 'no message';
         message = message.substring(0, 17) + '...';
-
-
         return (
             <Link  className="link" to={'/private-chat/' + this.props.name} onClick={()=>{this.props.handleClick(this.props.name)}} >
                 <div className='user-group'>

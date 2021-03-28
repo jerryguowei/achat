@@ -2,7 +2,6 @@ import { FriendAllMessages } from "../../Model/StateModel"
 
 export const FRIEND_TYPE = {
     UPDATE_LIST : 'FRIEND_UPDATE_LIST',
-    ADD_LIST : 'FRIEND_ADD_LIST',
     REMOVE_LIST : 'FRIEND_REMOVE_LIST'
 }
 
@@ -16,14 +15,6 @@ export const updateFriendList = (friendList:any) =>({
     type : FRIEND_TYPE.UPDATE_LIST,
     payload: friendList
 })
-
-
-export const addFriends = (newFriendList:any) => (
-    {
-        type : FRIEND_TYPE.ADD_LIST,
-        payload: newFriendList
-    }
-)
 
 export const removeFriends = (removedFriendList: any) => (
     {

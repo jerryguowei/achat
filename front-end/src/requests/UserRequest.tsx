@@ -1,3 +1,4 @@
+import { UserRequest } from '../Model/StateModel';
 import { UserInfo } from '../Model/UserInfoModel';
 import {axioClient} from '../utils/RequestUtil';
 
@@ -31,5 +32,26 @@ export async function register(userInfo: Header){
         data : userInfo
     });
 
+    return response;
+}
+
+
+export async function logout() {
+    const response = await axioClient.get('/logout');
+    return response;
+}
+
+export async function searchFriend(friendUsername:string) {    
+    const response = await axioClient.get(`api/user/search/${friendUsername}`);
+    return response;
+}
+
+
+export async function addFriend(userRequest:UserRequest) {
+    const response = await axioClient.request({
+        url: '/api/user/add',
+        method: 'post',
+        data : userRequest
+    });
     return response;
 }

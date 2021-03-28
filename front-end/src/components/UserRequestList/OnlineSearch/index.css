@@ -1,0 +1,15 @@
+.online-search {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.online-search .search-title {
+    text-align: center;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.online-search .search-title:hover {
+    color:blue;
+}

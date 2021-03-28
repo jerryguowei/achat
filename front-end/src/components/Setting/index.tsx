@@ -1,6 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { userLogout } from '../../redux/actions/userAction';
+import { logout } from '../../requests/UserRequest';
 import BootStrapModal from '../Modal';
 import './index.css';
 
@@ -21,6 +22,7 @@ export default class Setting extends React.Component<SettingProps, any> {
     confirmLogout = () =>{
         this.setState({showLogout: false});
         localStorage.removeItem('user_info');
+        logout();
         this.props.dispatch(userLogout())
         this.props.history.push('/login');
     }

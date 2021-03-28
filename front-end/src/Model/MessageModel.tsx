@@ -4,7 +4,8 @@ export interface PrivateMessage {
     type:string,
     message: string
     fromUsername: string,
-    toUsername: string
-    time: string
-    viewed: number
+    toUsername: string,
+    time: string,
+    viewed: number,
+    attachments: string
 }

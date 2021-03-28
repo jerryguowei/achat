@@ -1,8 +1,11 @@
 import SocketJS from 'sockjs-client';
 import Stomp, { Client, Subscription } from 'webstomp-client';
-import { addMessage, updateFriendList, initMessageList } from '../redux/actions/friendAction';
+import { SoketUserRequestDTO } from '../Model/UserRequest';
+import { addMessage, updateFriendList, initMessageList, removeFriends } from '../redux/actions/friendAction';
+import { updateUserRequest } from '../redux/actions/UserRequestAction';
 import store from '../redux/store';
 import { parseJson } from '../utils/GlobalUtils';
+
 
 class WebSocket {
     SERVER_URL: string = '';
@@ -12,6 +15,7 @@ class WebSocket {
     requestSubscription?: Subscription;
     messageSubscription?: Subscription;
     initSubscription?: Subscription;
+    userSubscription?: Subscription;
 
 
     constructor() {
@@ -37,19 +41,21 @@ class WebSocket {
 
     connectSocket = () => {
         let socket = new SocketJS(this.SERVER_URL + "/connect");
-        this.stompClient = Stomp.over(socket, { debug: false }); //{debug : false}
+        this.stompClient = Stomp.over(socket, {debug : false}); //{debug : false}
 
         this.stompClient.connect({}, (frame) => {
             this.isConnected = true;
             this.initSubscript();
             this.subscribeMessage();
             this.subscribeRequest();
+            this.subscribeUser();
         })
     }
 
     disconnectSocket = () => {
         this.requestSubscription && this.requestSubscription.unsubscribe();
         this.messageSubscription && this.messageSubscription.unsubscribe();
+        this.userSubscription && this.userSubscription.unsubscribe();
         if (this.stompClient) {
             this.stompClient.disconnect(() => {
                 console.log('disconnected.');
@@ -61,10 +67,10 @@ class WebSocket {
     initSubscript = () => {
         if (!this.stompClient) return;
         this.initSubscription = this.stompClient.subscribe('/app/init', message => {
-            const jsonMessage = parseJson(message.body)
-            store.dispatch(updateFriendList(jsonMessage.friends))
-            store.dispatch(initMessageList(jsonMessage.privateMessage))
-
+            const jsonMessage = parseJson(message.body);
+            store.dispatch(updateFriendList(jsonMessage.friends));
+            store.dispatch(initMessageList(jsonMessage.privateMessage));
+            store.dispatch(updateUserRequest(jsonMessage.addingRequest));
             if (!this.initSubscription) return;
             this.initSubscription.unsubscribe();
         })
@@ -74,6 +80,7 @@ class WebSocket {
         this.requestSubscription = this.stompClient.subscribe('/user/queue/request', message => {
             const jsonMessage = parseJson(message.body)
             console.log(jsonMessage);
+            store.dispatch(updateUserRequest(jsonMessage));
         });
     }
 
@@ -85,7 +92,20 @@ class WebSocket {
         });
     }
 
-    sendMessage = (body: string) => {
+    subscribeUser = () => {
+        if(!this.stompClient) return;
+        this.userSubscription = this.stompClient.subscribe('/user/queue/user', (message) => {
+            const jsonMessage = parseJson(message.body);
+            // store.dispatch(addMessage(jsonMessage))
+            if(jsonMessage && jsonMessage.type === 'UPDATE'){
+                 store.dispatch(updateFriendList([jsonMessage.userDTO]))
+            } else if(jsonMessage && jsonMessage.type === 'REMOVE'){
+                store.dispatch(removeFriends([jsonMessage.userDTO]))
+            }
+        });
+    }
+
+    sendMessage = (body: any) => {
         if(!this.stompClient) return;
         this.stompClient.send('/app/message', body);
     }
@@ -100,5 +120,9 @@ class WebSocket {
         this.stompClient.send('/app/more/message', body);
     }
 
+    copeRequest = (body: SoketUserRequestDTO) => {
+        if(!this.stompClient) return;
+        this.stompClient.send('/app/request', JSON.stringify(body));
+    }
 }
 export default new WebSocket();

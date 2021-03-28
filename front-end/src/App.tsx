@@ -8,7 +8,7 @@ import './index.css';
 import Setting from './containers/Setting';
 import PrivateRoute from './router/PrivateRoute';
 import PrivateChatPage from './containers/PrivateChatPage';
-
+import UserRequestList from './containers/UserRequestList';
 
 
 function LeftView() {
@@ -22,7 +22,7 @@ function LeftView() {
             <Route component= {SideBar}/>
             <Route path={['/', '/private-chat/:username']} exact component={HomePageList}/>
             <Route path='/setting' exact component={Setting}/>
-            <Route path='/request' exact component={Setting}/>
+            <Route path='/request' exact component={UserRequestList}/>
         </div>
     );
 }

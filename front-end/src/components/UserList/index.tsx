@@ -23,7 +23,9 @@ export default class UserList extends Component<UserListDefaultProd, any> {
         const friendList = this.props.friends.friendList ? this.props.friends.friendList : {};
         const friendAllMessages: FriendAllMessages  = this.props.friends.allMessages ? this.props.friends.allMessages : {};
         const usrGroupList = [];
-        this.totalCount = 0
+        this.totalCount = 0;
+
+
         for(const username in friendList){
             const friendMessageInfo : FriendMessageInfo = friendAllMessages[username];
             const messageList =  friendMessageInfo && friendMessageInfo.messageList ? friendMessageInfo.messageList : [];
@@ -34,7 +36,9 @@ export default class UserList extends Component<UserListDefaultProd, any> {
                 }
                 return accumulater;
             }, 0) :0
-            const latestMessage = messageList.length > 0 ? messageList[0].message : ''; 
+            let latestMessage = messageList.length > 0 ? messageList[0].message : ''; 
+            let latestMessageId = messageList.length > 0 ? messageList[0].messageId : -1; 
+            latestMessage  = latestMessage.replace('$[', '').replace(']$', '');
             const time = messageList.length > 0  ? toNormalTime(messageList[0].time) : '';     
             const list =  <UserGroup key={username}  
                             handleClick={this.viewMessage} 
@@ -42,11 +46,18 @@ export default class UserList extends Component<UserListDefaultProd, any> {
                             message={latestMessage} 
                             datetime={time}
                             notViewedCount={count}/>
-            usrGroupList.push(list);
+
+            const temp = {id: latestMessageId, list};               
+            usrGroupList.push(temp);
             this.totalCount += count;
         }
 
-        return usrGroupList;
+        usrGroupList.sort((a, b) => {
+            return a.id - b.id;
+        })
+        let userArray: Array<JSX.Element> = [];
+        usrGroupList.map(item => item.list).forEach(item => userArray.push(item));
+        return  userArray;
     }
 
     viewMessage = (username:string) => {
