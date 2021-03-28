@@ -61,3 +61,7 @@ ALTER TABLE `add_user_request` change COLUMN `status` `status`  enum('PENDING', 
 #2021-03-16
 ALTER TABLE `private_message` ADD COLUMN `viewed` TINYINT default 0 check (`viewed` in (0,1));
 ALTER TABLE `add_user_request` ADD COLUMN `viewed` TINYINT default 0 check (`viewed` in (0,1));
+
+
+ALTER DATABASE achat CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci; COMMIT;
+ALTER TABLE `private_message` MODIFY `message` TEXT CHARSET utf8mb4;
