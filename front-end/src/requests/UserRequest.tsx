@@ -80,13 +80,3 @@ export async function sendMessageWithFile(message:any, file: File, proressFun: F
     });
     return response;
 }
-
-export async function getMoreMesssage(data:any) {
-
-    const response = await axioClient.request({
-        url: '/api/user/add',
-        method: 'post',
-        data : data
-    });
-    return response;
-}

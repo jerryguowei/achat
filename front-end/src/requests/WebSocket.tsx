@@ -70,7 +70,6 @@ class WebSocket {
         if (!this.stompClient) return;
         this.initSubscription = this.stompClient.subscribe('/app/init', message => {
             const jsonMessage = parseJson(message.body);
-            console.log(jsonMessage.friends);
             store.dispatch(updateFriendList(jsonMessage.friends));
             store.dispatch(initMessageList(jsonMessage.privateMessage));
             store.dispatch(initHasMoreMessage(jsonMessage.privateMessage));
@@ -83,7 +82,6 @@ class WebSocket {
         if(!this.stompClient) return;
         this.requestSubscription = this.stompClient.subscribe('/user/queue/request', message => {
             const jsonMessage = parseJson(message.body)
-            console.log(jsonMessage);
             store.dispatch(updateUserRequest(jsonMessage));
         });
     }

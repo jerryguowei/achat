@@ -37,7 +37,6 @@ const UserList = (props: UserListDefaultProp) => {
     }, [totalCount, dispatch])
 
     const friendList = () =>{
-        console.log("update");
         const friends = props.friends;
         const byUserMessages = props.byUserMessages;
         const usrGroupList = [];

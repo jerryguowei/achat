@@ -10,22 +10,9 @@ interface Props {
     messages: Array<PrivateMessage>
     hasMoreMessage: boolean, 
     tempImages: tempImageType
+    loadMoreMessage: Function,
 };
 const ChatContentList = (props: Props) => {
-    const loadMoreMessage = () => {
-        const { messages } = props;
-        const page = Math.floor(messages.length / 20);
-        console.log("start loading")
-        if (page > 0) {
-            let targetUsername = messages[0].type === 'FROM' ? messages[0].toUsername : messages[0].fromUsername;
-            const data = {
-                page: page,
-                pageSize: 20,
-                username: targetUsername
-            }
-            console.log(data);
-        }
-    }
 
     const { messages, hasMoreMessage, tempImages } = props;
     const reverseMessages = messages.slice();
@@ -58,7 +45,7 @@ const ChatContentList = (props: Props) => {
             <ul className="chat-content-list" id="scrollableDiv">
                 <InfiniteScroll
                     dataLength={reverseMessages.length}
-                    next={loadMoreMessage}
+                    next={() => props.loadMoreMessage()}
                     style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
                     inverse={true}
                     hasMore={hasMoreMessage}

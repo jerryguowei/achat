@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { Alert } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
+import { v4 as uuidv4 } from 'uuid';
 import { PrivateMessage } from '../../Model/MessageModel';
+import { tempImageType } from '../../Model/StateModel';
+import { getMoreMesssage, handleSubmitMesage } from '../../redux/actions/messageAction';
 import WebSocket from '../../requests/WebSocket';
-import {sendMessageWithFile } from '../../requests/UserRequest';
 import ChatContentList from '../ChatContentList';
 import ChatHeader from '../ChatHeader';
 import InputArea from '../InputArea';
-import { v4 as uuidv4 }from 'uuid';
-import './index.css'
-import { addMessage, removeTempImage, saveTempImage } from '../../redux/actions/messageAction';
-import { tempImageType } from '../../Model/StateModel';
+import './index.css';
 interface RouteParams {
     username : string
 }
@@ -32,7 +31,7 @@ export default class PrivateChat extends Component<PrivateChatProps, any> {
             error: ''
         }
     }
-
+    
     handleSubmit = (value: string, file:File) => {
         const username =  this.props.match.params.username;
         const data: PrivateMessage = {
@@ -49,49 +48,22 @@ export default class PrivateChat extends Component<PrivateChatProps, any> {
         if(file && file.type) {
             data.attachments = file.name + ':' + file.type + ':';
         }
-        this.handleSaveTempImage(file, data.state);
-        this.props.dispatch(addMessage([Object.assign({}, data)]));
-        const handleProcess = (event: ProgressEvent) => {
-            let percentage =  Math.round(event.loaded / event.total * 100);       
-            if(percentage){
-                var newData = Object.assign({}, data);
-                newData.percent = percentage;
-                this.props.dispatch(addMessage([newData]))
+        this.props.dispatch(handleSubmitMesage(data, file));
+    }
+
+    loadMoreMessage = () => {
+        const { messageList } = this.props;
+        const page = Math.floor(messageList.length / 20);
+        console.log("start loading")
+        if (page > 0) {
+            let targetUsername = messageList[0].type === 'FROM' ? messageList[0].toUsername : messageList[0].fromUsername;
+            const data = {
+                page: page,
+                pageSize: 20,
+                username: targetUsername
             }
+           this.props.dispatch(getMoreMesssage(data));
         }
-        sendMessageWithFile(data, file, handleProcess).then((responseData)=> {
-                console.log(responseData);
-                this.setState({percentage: 0})
-                this.handleRemoveTempImage(file, data.state);
-        }).catch((error)=> {
-                console.log(error.response);
-                let message = (error.response && error.response.data && error.response.data.error) || 'failed to send message';
-                var newData = Object.assign({}, data);
-                newData.status = 'failed';
-                newData.error = message;
-                console.log(message);
-                this.props.dispatch(addMessage([newData]));
-                this.handleRemoveTempImage(file, data.state);
-            })
-    }
-
-    handleSaveTempImage = (file:File, state:string) => {
-        if(!file || !file.type || !file.type.match(/^image/)){
-            return;
-        }
-        const fileReader = new FileReader();
-        fileReader.onload = event => {
-           let value = event.target?.result as string;
-           this.props.dispatch(saveTempImage(value, state));
-        }
-        fileReader.readAsDataURL(file);
-    }
-
-    handleRemoveTempImage = (file: File, state:string) => {
-        if(!file || !file.type || !file.type.match(/^image/)){
-            return;
-        }
-        this.props.dispatch(removeTempImage(state));
     }
 
 
@@ -122,8 +94,9 @@ export default class PrivateChat extends Component<PrivateChatProps, any> {
              </Alert>   
                <ChatContentList 
                     messages={localMessages}
-                    hasMoreMessage = {hasMoreMessage}
-                    tempImages = {this.props.tempImages}
+                    hasMoreMessage={hasMoreMessage}
+                    tempImages={this.props.tempImages}
+                    loadMoreMessage={this.loadMoreMessage}
                 />
                 <InputArea handleSubmit = {this.handleSubmit} handleAlert={this.handleShowAlert}/>
             </div>
