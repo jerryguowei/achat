@@ -65,3 +65,13 @@ ALTER TABLE `add_user_request` ADD COLUMN `viewed` TINYINT default 0 check (`vie
 
 ALTER DATABASE achat CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci; COMMIT;
 ALTER TABLE `private_message` MODIFY `message` TEXT CHARSET utf8mb4;
+
+
+#2021-03-30
+#Add uuid column to private_message in order to store user's unique state.
+ALTER TABLE `private_message` ADD COLUMN  `state` VARCHAR(256); 
+UPDATE `private_message` t set t.state = uuid() where t.msg_id > 0;
+ALTER TABLE `private_message` ADD CONSTRAINT UNIQUE(`state`);
+ALTER TABLE `private_message` change COLUMN `state` `state` varchar(256)  NOT NULL;
+commit;
+
