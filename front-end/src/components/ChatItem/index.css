@@ -16,6 +16,7 @@
     padding: 6px 8px;
     border-radius: 6px;
     background-color: #f3f3f3;
+    position: relative;
 }
 
 .chat-item  .my-chat .msg-render {
@@ -24,24 +25,8 @@
     padding: 6px 8px;
     border-radius: 6px;
     background-color: #f3f3f3;
+    position: relative;
 }
-
-.chat-item .other-chat .img-render {
-    float: left;
-    margin-left: 60px;
-    padding: 6px 8px;
-    border-radius: 6px;
-    background-color: #f3f3f3;
-}
-
-.chat-item  .my-chat .img-render {
-    float: right;
-    margin-right: 60px;
-    padding: 6px 8px;
-    border-radius: 6px;
-    background-color: #f3f3f3;
-}
-
 
 .chat-item .my-chat {
     position: relative;

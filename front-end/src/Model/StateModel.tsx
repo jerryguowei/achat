@@ -4,30 +4,35 @@ import { UserInfo } from "./UserInfoModel";
 export interface ReduxState {
     user: UserState,
     friends: FriendState,
+    privateMessages: PrivateMessageWrapper,
     userRequests : [UserRequest],
 }
 
 export interface UserState {
-    user_info: UserInfo,
+    userInfo: UserInfo,
     status: string,
     error: string
 }
 
 export interface FriendState {
-    friendList: {[username:string]: UserInfo},
-    allMessages: FriendAllMessages,
-    notViewCount:number,
+    [username:string]: UserInfo
 }
 
-export interface FriendAllMessages {
-    [username: string] : FriendMessageInfo
+
+export interface PrivateMessageWrapper {
+    byUsers: ByUserMessageType,
+    hasMoreMessageByUser: {[ussername:string]: boolean},
+    notViewCount: number,
+    tempImage : tempImageType
 }
 
-export interface FriendMessageInfo {
-    minMsgId: number,
-    messageList : Array<PrivateMessage>
+export interface tempImageType {
+    [state:string]:string
 }
 
+export interface ByUserMessageType {
+    [username: string] : Array<PrivateMessage>
+}
 
 export interface UserRequest {
     id?: number,

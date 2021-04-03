@@ -10,11 +10,13 @@
     "bootstrap": "^4.5.3",
     "emoji-picker-react": "^3.4.3",
     "focus-trap-react": "^8.1.1",
+    "lodash": "^4.17.21",
     "no-scroll": "^2.1.1",
     "rc-notification": "^4.5.4",
     "react": "^17.0.0",
     "react-avatar": "^3.10.0",
     "react-bootstrap": "^1.4.0",
+    "react-circular-progressbar": "^2.0.4",
     "react-displace": "^2.3.0",
     "react-dom": "^17.0.0",
     "react-hook-form": "^6.15.5",
@@ -29,6 +31,7 @@
     "sockjs-client": "^1.5.0",
     "stompjs": "^2.3.3",
     "typescript": "^4.2.3",
+    "uuid": "^8.3.2",
     "webstomp-client": "^1.2.6"
   },
   "scripts": {
@@ -54,6 +57,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.21",
+    "@types/lodash": "^4.14.168",
     "@types/node": "^14.14.35",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.2",
@@ -61,6 +65,7 @@
     "@types/react-router": "^5.1.12",
     "@types/react-router-dom": "^5.1.7",
     "@types/sockjs-client": "^1.5.0",
+    "@types/uuid": "^8.3.0",
     "redux-devtools-extension": "^2.13.8"
   },
   "proxy": "http://localhost:8080"

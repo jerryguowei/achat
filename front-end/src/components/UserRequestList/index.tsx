@@ -5,7 +5,7 @@ import UserRequestItem from './UserRequestItem';
 import RequestModal from './RequestModal';
 import { useRef, useState } from 'react';
 import { UserRequestActionType } from '../../Model/UserRequest';
-import WebSocket from '../../modules/WebSocket';
+import WebSocket from '../../requests/WebSocket';
 import OnlineSearch from './OnlineSearch';
 
 interface RequestProps {

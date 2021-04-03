@@ -39,4 +39,4 @@ const errorReducer = (prevState="", action: {type:string, error?:string, payload
     }
 }
 
-export default combineReducers({user_info: userInfoReducer, status: statusReducer, error: errorReducer});
+export default combineReducers({userInfo: userInfoReducer, status: statusReducer, error: errorReducer});

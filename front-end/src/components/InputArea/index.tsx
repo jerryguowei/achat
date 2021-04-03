@@ -1,5 +1,5 @@
 import Picker, { SKIN_TONE_MEDIUM_DARK } from "emoji-picker-react";
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Icon from '../Icons';
 import './index.css';
 
@@ -9,8 +9,8 @@ interface InputAreaProps {
 }
 
 const InputArea = (props: InputAreaProps) => {
-    let myRef = React.createRef<any>();
-    let fileRef = React.createRef<any>();
+    let myRef:any = useRef(null);
+    let fileRef:any = useRef(null);
 
     const [value, setvalue] = useState('');
     const [showPicker, setShowPicker] = useState(false);
@@ -43,17 +43,13 @@ const InputArea = (props: InputAreaProps) => {
     const handleFileChange = (event: any)=> {
         let file:File = event.target.files[0];
         if(!file) return;
-        if(file.size > 1024* 1024 * 5){
-            props.handleAlert('file size must less than 5MB');
+        if(file.size > 1024* 1024 * 100){
+            props.handleAlert('file size must less than 10MB');
             fileRef.current.value = '';
             return;
         }
-        const fileReader = new FileReader();
-        fileReader.readAsDataURL(file);
-        fileReader.onload = () => {
-            props.handleSubmit(fileReader.result, file.name + ':');
-            fileRef.current.value = '';
-        }
+        props.handleSubmit("$[" + file.name + "]", file);
+        fileRef.current.value = '';
     }
     return (<div className="input-wrapper">
         {showPicker && <div className="picker-base" onClick={() => handleToggleClick()} ></div>}

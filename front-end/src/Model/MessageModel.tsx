@@ -1,11 +1,15 @@
 
 export interface PrivateMessage {
-    messageId : number,
+    messageId? : number,
     type:string,
     message: string
     fromUsername: string,
     toUsername: string,
     time: string,
     viewed: number,
-    attachments: string
+    attachments?: string,
+    state: string,
+    status?:string,
+    error?:string,
+    percent?:number,
 }

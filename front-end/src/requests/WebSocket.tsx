@@ -1,7 +1,9 @@
 import SocketJS from 'sockjs-client';
 import Stomp, { Client, Subscription } from 'webstomp-client';
+import { PrivateMessage } from '../Model/MessageModel';
 import { SoketUserRequestDTO } from '../Model/UserRequest';
-import { addMessage, updateFriendList, initMessageList, removeFriends } from '../redux/actions/friendAction';
+import { updateFriendList, removeFriends } from '../redux/actions/friendAction';
+import { addMessage, initHasMoreMessage, initMessageList } from "../redux/actions/messageAction";
 import { updateUserRequest } from '../redux/actions/UserRequestAction';
 import store from '../redux/store';
 import { parseJson } from '../utils/GlobalUtils';
@@ -23,7 +25,7 @@ class WebSocket {
             this.SERVER_URL = process.env.REACT_APP_HOST_URL;
         }
 
-        this.userInfo = store.getState().user.user_info;
+        this.userInfo = store.getState().user.userInfo;
         this.isConnected = false;
     }
 
@@ -68,8 +70,10 @@ class WebSocket {
         if (!this.stompClient) return;
         this.initSubscription = this.stompClient.subscribe('/app/init', message => {
             const jsonMessage = parseJson(message.body);
+            console.log(jsonMessage.friends);
             store.dispatch(updateFriendList(jsonMessage.friends));
             store.dispatch(initMessageList(jsonMessage.privateMessage));
+            store.dispatch(initHasMoreMessage(jsonMessage.privateMessage));
             store.dispatch(updateUserRequest(jsonMessage.addingRequest));
             if (!this.initSubscription) return;
             this.initSubscription.unsubscribe();
@@ -87,8 +91,8 @@ class WebSocket {
     subscribeMessage = () => {
         if(!this.stompClient) return;
         this.messageSubscription = this.stompClient.subscribe('/user/queue/message', (message) => {
-            const jsonMessage = parseJson(message.body);
-            store.dispatch(addMessage(jsonMessage))
+            const jsonMessage: Array<PrivateMessage> = parseJson(message.body);
+            store.dispatch(addMessage(jsonMessage));
         });
     }
 
@@ -104,20 +108,10 @@ class WebSocket {
             }
         });
     }
-
-    sendMessage = (body: any) => {
-        if(!this.stompClient) return;
-        this.stompClient.send('/app/message', body);
-    }
-
+    
     viewMessage = (body: string) => {
         if(!this.stompClient) return;
         this.stompClient.send('/app/view', body);
-    }
-
-    getMoreMessage = (body: string) => { //body: {page, pageSize, username}
-        if(!this.stompClient) return;
-        this.stompClient.send('/app/more/message', body);
     }
 
     copeRequest = (body: SoketUserRequestDTO) => {

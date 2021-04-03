@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { UserInfo } from '../../Model/UserInfoModel';
-import WebSocket from '../../modules/WebSocket';
+import WebSocket from '../../requests/WebSocket';
 import Icon from '../Icons';
 import Profile from '../Profile';
 import './index.css';

@@ -5,8 +5,8 @@ import { ReduxState } from '../../Model/StateModel';
 
 function mapStateToProps(state: ReduxState){
     return {
-        userInfo: state.user.user_info,
-        notViewCount: state.friends.notViewCount
+        userInfo: state.user.userInfo,
+        notViewCount: state.privateMessages.notViewCount
     }
 }
 export default connect(mapStateToProps)(SideBar);
