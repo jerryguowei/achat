@@ -248,7 +248,7 @@ public class DefaultUserService implements UserService {
 			throw new UsernameNotFoundException("username " + loginUsername + " is not found.");
 		}
 		List<UserMessageDTO> messageList = fetchPrivateMessage(toUser, messageRequestDTO.getPage(), messageRequestDTO.getPageSize(), loginUser);
-		this.broadcastService.sendPrivateMessage(loginUsername, messageList);
+//		this.broadcastService.sendPrivateMessage(loginUsername, messageList);
 		return messageList;
 	}
 

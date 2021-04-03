@@ -89,7 +89,7 @@ public class UserController {
     }
     
     @PostMapping("/more/message")
-    public List<UserMessageDTO> getMessage(MessageRequestDTO messageRequestDTO,  
+    public List<UserMessageDTO> getMessage(@RequestBody MessageRequestDTO messageRequestDTO,  
     		@AuthenticationPrincipal UserDetails userDetails){
     	return userService.findMessages(messageRequestDTO, userDetails.getUsername());
     }

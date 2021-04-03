@@ -44,16 +44,6 @@ public class MessageController {
     	System.out.println(message);
     }
     
-    
-    @MessageMapping("/more/message")
-    public void getMoreMessage(MessageRequestDTO messageRequestDTO, Principal principal) {
-    	try {
-    	userService.findMessages(messageRequestDTO, principal.getName());
-    	} catch (Exception e) {
-    		logger.error(e.getMessage(), e);
-		}
-    }
-    
     @MessageMapping("/view")
     public void viewMessage(List<UserMessageDTO> messageList, Principal principal) {
     	
