@@ -31,6 +31,8 @@ public class PrivateMessage {
 	private Date time;
 	
 	private Integer viewed = 0;
+	
+	private String state;
 
 	public Long getMsgId() {
 		return msgId;
@@ -111,5 +113,13 @@ public class PrivateMessage {
 		} else if (!msgId.equals(other.msgId))
 			return false;
 		return true;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 }

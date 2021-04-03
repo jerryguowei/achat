@@ -59,11 +59,9 @@ public class MainServiceImpl implements MainService {
 		for(UserInfo friend : loginUser.getFriends()) {
 			try {
 				List<UserMessageDTO> userMessageDTOList = userService.findMessages(friend, 0, 20, loginUser);
-				Long minMsgId = privateMessageRepository.findMinMsgId(friend.getUserId(), loginUser.getUserId());
-				if(minMsgId == null) {
-					minMsgId = -1L;
-				}
-				PrivateMessageListDTO privateMessageListDTO = new PrivateMessageListDTO(minMsgId, userMessageDTOList);				
+				Long messageCount = privateMessageRepository.countMessages(friend.getUserId(), loginUser.getUserId());
+				boolean hasMoreMessge = messageCount > userMessageDTOList.size() ? true : false;				
+				PrivateMessageListDTO privateMessageListDTO = new PrivateMessageListDTO(hasMoreMessge, userMessageDTOList);				
 				initDTO.setPrivateMessagePerUser(friend.getUsername(), privateMessageListDTO);
 			}catch (Exception e) {
 				logger.error(e.getMessage(), e);

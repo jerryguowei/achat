@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.duduanan.achat.dto.UserRequestDTO;
 import com.duduanan.achat.dto.MessageRequestDTO;
 import com.duduanan.achat.dto.UserDTO;
 import com.duduanan.achat.dto.UserMessageDTO;
 import com.duduanan.achat.dto.UserRegistractionDTO;
+import com.duduanan.achat.dto.UserRequestDTO;
 import com.duduanan.achat.entity.UserInfo;
 
 public interface UserService {
@@ -32,7 +33,7 @@ public interface UserService {
 	
 	List<UserMessageDTO> findMessages(UserInfo toUser, Integer page, Integer pageSize, UserInfo loginUser);
 	
-	UserMessageDTO sendMessage(UserMessageDTO userMessageDTO, String loginUsername);
+	UserMessageDTO sendMessage(UserMessageDTO userMessageDTO, String loginUsername, MultipartFile file);
 	
 	UserDTO removeFriends(String friendUsername, UserDetails userDetails);
 	

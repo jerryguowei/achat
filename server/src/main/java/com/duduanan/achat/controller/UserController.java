@@ -18,14 +18,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.duduanan.achat.dto.UserRequestDTO;
 import com.duduanan.achat.dto.MessageRequestDTO;
 import com.duduanan.achat.dto.UserDTO;
 import com.duduanan.achat.dto.UserMessageDTO;
 import com.duduanan.achat.dto.UserRegistractionDTO;
+import com.duduanan.achat.dto.UserRequestDTO;
 import com.duduanan.achat.service.UserService;
 import com.duduanan.achat.service.impl.LoginUserDetails;
 
@@ -87,17 +88,9 @@ public class UserController {
     	return userService.removeFriends(friendUsername, userDetails);
     }
     
-    
-    
-    @GetMapping("/message")
-    public List<UserMessageDTO> getMessage(@RequestParam("username") String username, 
-    		@RequestParam("page") Integer page,  @RequestParam("pageSize") Integer pageSize,  
+    @PostMapping("/more/message")
+    public List<UserMessageDTO> getMessage(MessageRequestDTO messageRequestDTO,  
     		@AuthenticationPrincipal UserDetails userDetails){
-    	
-    	MessageRequestDTO messageRequestDTO = new MessageRequestDTO();
-    	messageRequestDTO.setUsername(username);
-    	messageRequestDTO.setPage(page);
-    	messageRequestDTO.setPageSize(pageSize);
     	return userService.findMessages(messageRequestDTO, userDetails.getUsername());
     }
     
@@ -106,7 +99,7 @@ public class UserController {
     		@AuthenticationPrincipal UserDetails userDetails) {
     	logger.info("start to send message");
     	
-    	return userService.sendMessage(userMessageDTO, userDetails.getUsername());
+    	return userService.sendMessage(userMessageDTO, userDetails.getUsername(), null);
     }
     
     @PostMapping("/message/view")
@@ -122,5 +115,12 @@ public class UserController {
     		@AuthenticationPrincipal UserDetails userDetails) {
     	logger.info("start to view request.");
     	return userService.viewRequest(userRequestDTO.getId(), userDetails.getUsername());
+    }
+    
+    @PostMapping("/message/file")
+    public UserMessageDTO handleMessageFile(@RequestPart("message") UserMessageDTO message, 
+    		@RequestPart(name="file", required = false) MultipartFile file, @AuthenticationPrincipal UserDetails userDetails) {
+    	return userService.sendMessage(message, userDetails.getUsername(), file);
+
     }
 }

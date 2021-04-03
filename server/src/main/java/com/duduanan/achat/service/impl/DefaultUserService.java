@@ -1,5 +1,6 @@
 package com.duduanan.achat.service.impl;
 
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -19,15 +20,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.duduanan.achat.dto.MessageRequestDTO;
+import com.duduanan.achat.dto.SideType;
+import com.duduanan.achat.dto.UserDTO;
+import com.duduanan.achat.dto.UserMessageDTO;
+import com.duduanan.achat.dto.UserRegistractionDTO;
 import com.duduanan.achat.dto.UserRequestDTO;
 import com.duduanan.achat.dto.message.NoticeFriendDTO;
 import com.duduanan.achat.dto.message.NoticeFriendDTO.NoticeType;
-import com.duduanan.achat.dto.MessageRequestDTO;
-import com.duduanan.achat.dto.UserDTO;
-import com.duduanan.achat.dto.UserMessageDTO;
-import com.duduanan.achat.dto.SideType;
-import com.duduanan.achat.dto.UserRegistractionDTO;
 import com.duduanan.achat.entity.AddUserRequest;
 import com.duduanan.achat.entity.PrivateMessage;
 import com.duduanan.achat.entity.RequestStatus;
@@ -38,6 +41,7 @@ import com.duduanan.achat.repository.PrivateMessageRepository;
 import com.duduanan.achat.repository.UserRepository;
 import com.duduanan.achat.service.BroadcastService;
 import com.duduanan.achat.service.UserService;
+import com.duduanan.achat.utils.GlobalUtils;
 
 @Service
 @Transactional
@@ -271,7 +275,7 @@ public class DefaultUserService implements UserService {
 	}
 	
 	@Override
-	public UserMessageDTO sendMessage(UserMessageDTO userMessageDTO, String loginUsernmae) {
+	public UserMessageDTO sendMessage(UserMessageDTO userMessageDTO, String loginUsernmae, MultipartFile file) {
 		UserInfo toUser = userRepository.findByUsername(userMessageDTO.getToUsername());
 		if(toUser == null) {
 			logger.info("username " + userMessageDTO.getToUsername() + " is not found.");
@@ -296,12 +300,12 @@ public class DefaultUserService implements UserService {
 		String message = userMessageDTO.getMessage();
 		String attachments = userMessageDTO.getAttachments();
 		
-		if(userMessageDTO.getAttachments() != null && !attachments.isEmpty()) {
+		if(file != null && !file.isEmpty()) {
 			//means it's a binary message.
-			String savedFileName = mimeFileUtils.saveFile(userMessageDTO.getMessage());
-			String fileName = attachments.split(":")[0];
-			String mimeType = mimeFileUtils.extractMimeType(userMessageDTO.getMessage()).getMimeTypeString();
-			attachments = fileName + ":" + mimeType + ":" + savedFileName;
+			String savedFileNameWithMimeType = mimeFileUtils.saveFile(file);
+			String fileName = file.getOriginalFilename();
+			String [] splitedInfo = savedFileNameWithMimeType.split(":");
+			attachments = fileName + ":" + splitedInfo[1] + ":" + splitedInfo[0];
 			message = "$[" + fileName +  "]$";
 		}
 		
@@ -312,7 +316,9 @@ public class DefaultUserService implements UserService {
 		privateMessage.setAttachments(attachments);
 		privateMessage.setViewed(0);
 		privateMessage.setTime(new Date());
-		
+		String state = userMessageDTO.getState();
+		state = StringUtils.isEmpty(state) ? GlobalUtils.uuid() : state;
+		privateMessage.setState(state);		
 		privateMessage = privateMessageRepository.save(privateMessage);
 		
 		userMessageDTO = new UserMessageDTO(privateMessage, SideType.TO);

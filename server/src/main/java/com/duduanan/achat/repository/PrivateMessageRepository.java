@@ -29,4 +29,8 @@ public interface PrivateMessageRepository extends CrudRepository<PrivateMessage,
 	@Query(value =  "select t.msg_id from achat.private_message t where (t.from_user = ?1 AND to_user = ?2 OR t.to_user= ?1 AND t.from_user = ?2) "
 			+ "ORDER BY t.msg_id limit 1 ", nativeQuery = true)
 	Long findMinMsgId(Long fromUserId, Long toUserId);
+	
+	
+	@Query(value= "select count(*) from private_message t  where (t.from_user = ?1 AND to_user = ?2 OR t.to_user= ?1 AND t.from_user = ?2)", nativeQuery = true)
+	Long countMessages(Long fromUserId, Long toUserId);
 }

@@ -20,6 +20,7 @@ public class UserMessageDTO {
 	private String attachments; //filename:URL
 	private Date time;
 	private Integer viewed = 0;
+	private String state;
 		
 	public UserMessageDTO() {
 		
@@ -34,6 +35,7 @@ public class UserMessageDTO {
 		this.time = privateMessage.getTime();
 		this.type = type;
 		this.viewed = privateMessage.getViewed();
+		this.state = privateMessage.getState();
 	}
 	
 	public UserMessageDTO(PrivateMessage privateMessage, String loginUsername) {
@@ -49,6 +51,7 @@ public class UserMessageDTO {
 		} else {
 			this.type= SideType.TO;
 		}
+		this.state = privateMessage.getState();
 	}
 	
 	public Long getMessageId() {
@@ -107,5 +110,13 @@ public class UserMessageDTO {
 
 	public void setViewed(Integer viewed) {
 		this.viewed = viewed;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 }

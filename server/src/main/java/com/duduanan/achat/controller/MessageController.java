@@ -40,8 +40,7 @@ public class MessageController {
     @MessageMapping("/message")
     public void sendMessage(UserMessageDTO message, Principal principal) {
     	
-    	String messgeString = message.getMessage();
-    	userService.sendMessage(message, principal.getName());
+    	userService.sendMessage(message, principal.getName(), null);
     	System.out.println(message);
     }
     

@@ -2,6 +2,7 @@ package com.duduanan.achat.files;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,10 +12,9 @@ import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.duduanan.achat.utils.GlobalUtils;
 
@@ -52,6 +52,20 @@ public class MimeFileUtils {
 				logger.error(e.getMessage());
 			}		
 		}
+		return null;
+	}
+	
+	
+	public  String saveFile(MultipartFile file) {		
+			String fileName = GlobalUtils.uuid() +  file.getOriginalFilename();
+			File savedFile = new File(chatFileFolder + fileName);
+			try {
+				file.transferTo(savedFile);
+				String mimeType = Files.probeContentType(savedFile.toPath());
+				return fileName + ":" + mimeType;
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+			}		
 		return null;
 	}
 	
