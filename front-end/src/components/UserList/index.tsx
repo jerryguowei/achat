@@ -81,7 +81,7 @@ const UserList = (props: UserListDefaultProp) => {
         return (
             <div className="user-list-wrapper">
                 <div className="user-list-header" onClick={()=>{console.log("click")}}>
-                    header
+                    Friends
                 </div>
                  <div className="user-list">
                     {friendList()}

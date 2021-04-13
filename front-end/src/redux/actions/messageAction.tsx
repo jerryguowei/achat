@@ -3,6 +3,7 @@ import mapValues from 'lodash/mapValues';
 import { getFriendUsernameFromMessage } from "../../utils/GlobalUtils";
 import { axioClient } from "../../utils/RequestUtil";
 import { sendMessageWithFile } from "../../requests/UserRequest";
+import { userLogout } from "./userAction";
 
 export const PRIVATE_MESSAGE_TYPE = {
     ADD_MESSAGE: 'PRIVATE_ADD_MESSAGE',
@@ -110,6 +111,11 @@ export const handleSubmitMesage = (data: PrivateMessage, file: File) => {
         sendMessageWithFile(data, file, handleProcess).then((responseData) => {
             handleRemoveTempImage(dispatch, file, data.state);
         }).catch((error) => {
+            console.log(error.response);
+            if(error.response && error.response.status === 401){
+                console.log(error.response);
+                dispatch(userLogout());
+            }
             let message = (error.response && error.response.data && error.response.data.error) || 'failed to send message';
             var newData = Object.assign({}, data);
             newData.status = 'failed';

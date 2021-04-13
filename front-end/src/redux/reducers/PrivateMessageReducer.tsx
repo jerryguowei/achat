@@ -5,6 +5,7 @@ import { messageReverseSortComparator } from "../../utils/GlobalUtils";
 import { PRIVATE_MESSAGE_TYPE } from "../actions/messageAction";
 import values from 'lodash/values';
 import omit from 'lodash/omit';
+import { LOGIN_TYPE } from "../actions/userAction";
 
 
 function notViewCountReducer(state=0, action: Action) {
@@ -76,9 +77,17 @@ const tempImageReducer = (state = {}, action: Action) => {
     }
 }
 
-export default combineReducers({
-    byUsers: byUserMessageReducer,
-    hasMoreMessageByUser: hasMoreMessageReducer,
-    notViewCount: notViewCountReducer,
-    tempImage: tempImageReducer,
-});
+export default function PrivateMessageReducer(state = {} as any, action: Action) {
+    switch(action.type){
+        case LOGIN_TYPE.LOGOUT:
+            return {};
+        default:
+          return combineReducers({
+                byUsers: byUserMessageReducer,
+                hasMoreMessageByUser: hasMoreMessageReducer,
+                notViewCount: notViewCountReducer,
+                tempImage: tempImageReducer,
+            })(state, action);
+    }
+}
+

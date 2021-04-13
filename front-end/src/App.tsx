@@ -3,13 +3,12 @@ import HomePageList from './containers/UserList';
 import Login from './containers/Login';
 import SideBar from './containers/SideBar';
 import SignUp from './containers/SignUp';
-import {NonProtectRoute} from './router/CumtomRoute';
+import {NonProtectRoute} from './router/NonProtectRoute';
 import './index.css';
 import Setting from './containers/Setting';
 import PrivateRoute from './router/PrivateRoute';
 import PrivateChatPage from './containers/PrivateChatPage';
 import UserRequestList from './containers/UserRequestList';
-
 
 function LeftView() {
     let location = useLocation();
@@ -41,11 +40,10 @@ function RightView() {
     );
 }
 
-function MainView(){
-
+function MainView(props:any){
     return (<>
-        <Route exact path={FUNCTION_ROUTERS} component={LeftView}/>
-        <Route exact path={FUNCTION_ROUTERS} component={RightView}/>
+        <LeftView/>
+        <RightView/>
     </>)
 }
 
@@ -63,7 +61,6 @@ const App = () => (
                 <NonProtectRoute exact path='/login'  component={Login}/>
                 <NonProtectRoute exact path='/signup' component={SignUp}/>
                 <PrivateRoute exact path={FUNCTION_ROUTERS} component={MainView} />
-                {/* <PrivateRoute exact path={FUNCTION_ROUTERS} component={RightView} /> */}
             </Switch>
         </div>
     </Router>

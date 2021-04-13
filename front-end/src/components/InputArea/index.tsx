@@ -6,6 +6,7 @@ import './index.css';
 interface InputAreaProps {
     handleSubmit: Function
     handleAlert: Function
+    width: number
 }
 
 const InputArea = (props: InputAreaProps) => {
@@ -51,7 +52,8 @@ const InputArea = (props: InputAreaProps) => {
         props.handleSubmit("$[" + file.name + "]", file);
         fileRef.current.value = '';
     }
-    return (<div className="input-wrapper">
+    
+    return (<div className="input-wrapper"  style={{width: `${props.width}px`}}>
         {showPicker && <div className="picker-base" onClick={() => handleToggleClick()} ></div>}
         <div className="icon-wrapper p-relative">
             <Icon name="emoji-smile" size="20" onClick={() => handleToggleClick()} />

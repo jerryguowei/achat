@@ -23,15 +23,29 @@ interface PrivateChatProps extends RouteComponentProps<RouteParams> {
 }
 
 export default class PrivateChat extends Component<PrivateChatProps, any> {
-
+    ref:React.RefObject<HTMLDivElement>
     constructor(props: PrivateChatProps) {
         super(props);
         this.state = {
             showAlert: false,
             error: ''
         }
+        this.ref = React.createRef();
     }
-    
+    componentDidMount() {
+        if(this.ref.current){
+            this.updateSize();
+            window.addEventListener('resize', this.updateSize)
+        }
+    }
+    componentWillUnmount() {
+        if(this.ref.current) {
+            window.removeEventListener('resize', this.updateSize)
+        }
+    }
+    updateSize = () => {
+        this.setState({width: this.ref.current?.offsetWidth})
+    }
     handleSubmit = (value: string, file:File) => {
         const username =  this.props.match.params.username;
         const data: PrivateMessage = {
@@ -66,7 +80,6 @@ export default class PrivateChat extends Component<PrivateChatProps, any> {
         }
     }
 
-
     handleShowAlert =(error:string) => {
         this.setState({showAlert : true, error});
     }
@@ -80,14 +93,14 @@ export default class PrivateChat extends Component<PrivateChatProps, any> {
             WebSocket.viewMessage(JSON.stringify(notViewedMessages));
         }   
     }
-
+ 
     render() {
         const {match, messageList, hasMoreMessage} = this.props;
         const username = match.params.username;
         const localMessages = messageList;
 
         return (
-            <div className= "chat-wrapper" onClick={() => this.handleView(localMessages, username)}>
+            <div className= "chat-wrapper" onClick={() => this.handleView(localMessages, username)} ref={this.ref}>
               <ChatHeader username={username}/>
               <Alert show={this.state.showAlert} variant="danger" onClose={()=>this.handleCloseAlert()} className="message-alert"  dismissible>
                         <p>{this.state.error}</p>
@@ -98,7 +111,7 @@ export default class PrivateChat extends Component<PrivateChatProps, any> {
                     tempImages={this.props.tempImages}
                     loadMoreMessage={this.loadMoreMessage}
                 />
-                <InputArea handleSubmit = {this.handleSubmit} handleAlert={this.handleShowAlert}/>
+                <InputArea width= {this.state.width} handleSubmit = {this.handleSubmit} handleAlert={this.handleShowAlert}/>
             </div>
         );
     }

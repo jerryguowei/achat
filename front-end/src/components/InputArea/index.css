@@ -1,6 +1,8 @@
 .input-wrapper {
+    position: fixed;
     height: 55px;
-    position: relative;
+    bottom: 0;
+    max-width: 100%;
     width: 100%;
     background-color: rgb(243, 243, 243);
     padding: 8px 10px;
