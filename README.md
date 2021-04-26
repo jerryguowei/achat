@@ -24,7 +24,7 @@
 ### Screen shot
 <table>
 	<tr>
-    <td><img alt="Chat View" href="https://github.com/jerryguowei/achat/blob/master/chat-show.png"/></td>
+    <td><img alt="Chat View" src="./chat-show.png"/></td>
     </tr>
 </table>
 
