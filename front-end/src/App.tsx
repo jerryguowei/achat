@@ -47,6 +47,10 @@ function MainView(props:any){
     </>)
 }
 
+new Promise((resolve, reject) => {
+    resolve('hi');
+})
+
 const FUNCTION_ROUTERS = [
     '/',
     '/private-chat/:username',
