@@ -1,0 +1,35 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: -1
+spring:
+  datasource:
+    username: achat
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/achat
+    hikari:
+      connection-timeout: 40000
+      maximum-pool-size: 10   
+  jpa:
+    properties:
+      hibernate.format_sql: true
+      hibernate.show_sql: true
+  servlet:
+    multipart:
+      max-file-size:
+        100MB
+      max-request-size: 100MB
+  application:
+    name: Achat
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+achat:
+   websocket:
+      allow-origin: http://localhost:3000
+   chat-file-folder: "F:\\aChat\\chat-file\\"
+      

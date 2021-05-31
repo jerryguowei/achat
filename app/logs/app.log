@@ -1,0 +1,44 @@
+14:50:23.041 [http-nio-8080-exec-5] INFO  com.duduanan.achat.controller.MainController - start login.
+14:50:23.045 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        userinfo0_.user_id as user_id1_2_,
+        userinfo0_.active as active2_2_,
+        userinfo0_.create_date as create_d3_2_,
+        userinfo0_.email as email4_2_,
+        userinfo0_.password as password5_2_,
+        userinfo0_.update_date as update_d6_2_,
+        userinfo0_.username as username7_2_ 
+    from
+        user_info userinfo0_ 
+    where
+        userinfo0_.username=?
+14:50:23.045 [http-nio-8080-exec-5] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [1] as [VARCHAR] - [jerry]
+14:50:23.047 [http-nio-8080-exec-5] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([user_id1_2_] : [BIGINT]) - [2]
+14:50:23.047 [http-nio-8080-exec-5] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([active2_2_] : [BOOLEAN]) - [true]
+14:50:23.048 [http-nio-8080-exec-5] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([create_d3_2_] : [TIMESTAMP]) - [2021-02-08 10:27:20.0]
+14:50:23.048 [http-nio-8080-exec-5] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([email4_2_] : [VARCHAR]) - [jerry@gmail.com]
+14:50:23.048 [http-nio-8080-exec-5] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([password5_2_] : [VARCHAR]) - [$2a$10$0ng8tognAY8OQWW4f3KUDunPNHWlAd5iGTuBQZ5N91j2FNz5ebOi.]
+14:50:23.048 [http-nio-8080-exec-5] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([update_d6_2_] : [TIMESTAMP]) - [2021-02-08 10:27:20.0]
+14:50:23.048 [http-nio-8080-exec-5] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([username7_2_] : [VARCHAR]) - [jerry]
+14:50:46.094 [http-nio-8080-exec-6] INFO  com.duduanan.achat.controller.MainController - start login.
+14:50:46.097 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    select
+        userinfo0_.user_id as user_id1_2_,
+        userinfo0_.active as active2_2_,
+        userinfo0_.create_date as create_d3_2_,
+        userinfo0_.email as email4_2_,
+        userinfo0_.password as password5_2_,
+        userinfo0_.update_date as update_d6_2_,
+        userinfo0_.username as username7_2_ 
+    from
+        user_info userinfo0_ 
+    where
+        userinfo0_.username=?
+14:50:46.097 [http-nio-8080-exec-6] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [1] as [VARCHAR] - [jerry]
+14:50:46.099 [http-nio-8080-exec-6] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([user_id1_2_] : [BIGINT]) - [2]
+14:50:46.100 [http-nio-8080-exec-6] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([active2_2_] : [BOOLEAN]) - [true]
+14:50:46.101 [http-nio-8080-exec-6] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([create_d3_2_] : [TIMESTAMP]) - [2021-02-08 10:27:20.0]
+14:50:46.101 [http-nio-8080-exec-6] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([email4_2_] : [VARCHAR]) - [jerry@gmail.com]
+14:50:46.101 [http-nio-8080-exec-6] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([password5_2_] : [VARCHAR]) - [$2a$10$0ng8tognAY8OQWW4f3KUDunPNHWlAd5iGTuBQZ5N91j2FNz5ebOi.]
+14:50:46.101 [http-nio-8080-exec-6] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([update_d6_2_] : [TIMESTAMP]) - [2021-02-08 10:27:20.0]
+14:50:46.101 [http-nio-8080-exec-6] TRACE org.hibernate.type.descriptor.sql.BasicExtractor - extracted value ([username7_2_] : [VARCHAR]) - [jerry]

@@ -1,0 +1,62 @@
+.user-group {
+    border-bottom: 1px solid rgb(235,235,235);
+    height: 80px;
+    display: flex;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.user-group:hover {
+    background-color: rgb(235, 235, 235);
+}
+
+.user-group .user-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 10px;
+}
+.user-group .name-date {
+  font-size: 14px;
+}
+.user-group .user-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.user-group .user-date {
+    float: right;
+    font-size: 10px;
+    overflow: hidden;
+}
+
+.user-group .message {
+    font-size: 10px;
+    overflow: hidden;
+}
+
+.link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.link:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.unread {
+    display: inline-block;
+    margin-top: -30%;
+    margin-left: -20%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 50%;
+    font-size: 16px;
+    text-align: center;
+    color: white;
+    background-color : red;
+  }

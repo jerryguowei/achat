@@ -1,0 +1,86 @@
+
+.chat-item {
+    width: 100%;
+    margin: 36px 0;
+}
+
+.chat-item .msg-render {
+    max-width : 50%;
+    font-size: 14px;
+    word-wrap:break-word;
+}
+
+.chat-item .other-chat .msg-render {
+    float: left;
+    margin-left: 60px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background-color: #f3f3f3;
+    position: relative;
+}
+
+.chat-item  .my-chat .msg-render {
+    float: right;
+    margin-right: 60px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background-color: #f3f3f3;
+    position: relative;
+}
+
+.chat-item .my-chat {
+    position: relative;
+    width: 100%;
+
+}
+
+.chat-item .my-chat .avatar {
+    right: 10px;
+    cursor: pointer;
+    position: absolute;
+    transform: translateY(-50%);
+}
+
+.chat-item .my-chat .name-time {
+    font-size: 14px;
+    right:60px;
+    top: -26px;
+    position: absolute;
+    color: #686868;
+}
+
+.chat-item .my-chat .name-time span {
+    padding-left: 6px;
+}
+
+.chat-item .my-chat .name-time span:nth-child(2) {
+    font-size: 10px;
+}
+
+.chat-item .other-chat {
+    position: relative;
+    width: 100%;
+}
+
+.chat-item .other-chat .avatar {
+    left: 10px;
+    cursor: pointer;
+    position: absolute;
+    transform: translateY(-50%);
+}
+
+.chat-item .other-chat .name-time {
+    font-size: 14px;
+    left:65px;
+    top: -26px;
+    position: absolute;
+    color: #686868;
+}
+
+.chat-item .other-chat .name-time span {
+    padding-right: 6px;
+}
+
+.chat-item .other-chat .name-time span:nth-child(2) {
+    font-size: 10px;
+}
