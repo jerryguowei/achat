@@ -6,6 +6,7 @@
  ![MySQL](https://img.shields.io/badge/MySQL-8.0.19-blue)
  ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.3.4-blue)
  ![Spring Data](https://img.shields.io/badge/Spring%20Data-2.3.4-blue)
+ ![Web Socket](https://img.shields.io/badge/Web-Socket-blue)
  
  AChat is built based on web and used to do instant talk with friends. 
  
@@ -24,7 +25,7 @@
 ### Screen shot
 <table>
 	<tr>
-    <td><img alt="Chat View" href="./chat-show.png"/></td>
+    <td><img alt="Chat View" src="./chat-show.png"/></td>
     </tr>
 </table>
 
