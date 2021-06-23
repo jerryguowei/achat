@@ -10,13 +10,15 @@
  
  AChat is built based on web and used to do instant talk with friends. 
  
+ ### Requirment
+ * Java 8 or 11 installed
+ * python3 installed
+ * latest version node(v14.17.1) installed
  
  ### How to start
- * run mysql script under mysq folder.
- * start achat back-end spring boot app under back-end folder
- * start react built front-end by npm start command under front-end folder
- * sign up a new user and login the app
- 
+ * run the python script run.py via **python run.py** 
+ * go to url: http://localhost:8080 
+ * login with user: jerry; password: jerry
 
 ##### You can login in our [online demo app](http://duduanan.com) at any time with test account:
   > username: **admin**  
