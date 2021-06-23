@@ -1,0 +1,17 @@
+.user-list-wrapper {
+    flex-grow: 1;
+}
+
+.user-list-header {
+    border-bottom: 1px solid rgb(235,235,235);
+    height: 80px;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.user-list-wrapper .user-list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: calc(100% - 80px);
+}

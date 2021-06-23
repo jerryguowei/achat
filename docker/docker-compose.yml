@@ -8,3 +8,18 @@ services:
         MYSQL_PASSWORD: password
       ports:
           - 3306:3306
+      volumes:
+        - "./setup.sql:/docker-entrypoint-initdb.d/1.sql"
+        - my-db:/var/lib/mysql
+    achat:
+      depends_on:
+        - db-mysql
+      restart: on-failure
+      image: achat:1.0
+      ports:
+          - 8080:8080
+      volumes:
+        - achat-vol:/opt/files
+volumes:
+  achat-vol:
+  my-db:

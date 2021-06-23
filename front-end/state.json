@@ -1,0 +1,42 @@
+{
+    "user": {
+        "userInfo": {
+            "userId": 1,
+            "username": "jerry",
+            "email": "jerry@gmail.com"
+        },
+        "status": "success",
+        "error": ""
+    },
+    "friends": {
+        "gaoxin": {
+            "userId": 2,
+            "username": "gaoxin",
+            "email": "gaoxin@gamil.com"
+        },
+        "james": {
+            "userId": 3,
+            "username": "james",
+            "email": "james@gmail.com"
+        }
+    },
+    "privateMessages": {
+        "byUsers": {
+            "gaoxin": [{                
+                "messageId": 1,
+                "message": "hi",
+                "time": "",
+                "attatchments":"",
+                "state": "abcdeafg",
+                "status": "success" //processing, failed.
+
+            }],
+            "james": []
+        },
+        "hasMoreMessageByUser": {
+            "gaoxin": true,
+            "james":true
+        },
+        "notViewCount": 0
+    }
+}

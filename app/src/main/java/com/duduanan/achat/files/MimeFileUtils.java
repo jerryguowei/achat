@@ -2,12 +2,12 @@ package com.duduanan.achat.files;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypes;
 import org.slf4j.Logger;
@@ -22,6 +22,7 @@ import com.duduanan.achat.utils.GlobalUtils;
 @Service
 public class MimeFileUtils {
 	private static Logger logger = LoggerFactory.getLogger(MimeFileUtils.class);
+	private Tika tika = new Tika();
 	
 	  @Value("${achat.chat-file-folder}")
 	  private String chatFileFolder;
@@ -58,10 +59,12 @@ public class MimeFileUtils {
 	
 	public  String saveFile(MultipartFile file) {		
 			String fileName = GlobalUtils.uuid() +  file.getOriginalFilename();
+			logger.info("chat file folder" + chatFileFolder);
 			File savedFile = new File(chatFileFolder + fileName);
 			try {
 				file.transferTo(savedFile);
-				String mimeType = Files.probeContentType(savedFile.toPath());
+				String mimeType = tika.detect(savedFile);
+				logger.info("mime Type " + mimeType + " for file" + savedFile.getName());
 				return fileName + ":" + mimeType;
 			} catch (IOException e) {
 				logger.error(e.getMessage());

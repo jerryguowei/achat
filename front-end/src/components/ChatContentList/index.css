@@ -1,0 +1,15 @@
+.chat-content-wrapper {
+    height: calc(100% - 100px);
+}
+
+.chat-content-list {
+    max-height: 100%;
+    list-style-type: none;
+    overflow-y:auto;
+    padding: 20px 0 ;
+    margin-bottom: 0;
+    display: flex;
+    margin-top: 50px;
+    flex-direction: column-reverse;
+}
+
