@@ -14,6 +14,7 @@
  * Java 8 or 11 installed
  * python3 installed
  * latest version node(v14.17.1) installed
+ * docker-compose installed
  
  ### How to start
  * run the python script run.py via **python run.py** 
