@@ -15,10 +15,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -40,22 +40,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	 http.authorizeRequests().antMatchers("/api/user/register", "/*", "/actuator/*", "/static/**", "/manifest.json", "/files/**" ).permitAll()
                 .and().authorizeRequests().anyRequest().authenticated()
                 .and().csrf().disable().httpBasic()
-                .authenticationEntryPoint(customBasicAuthenticationEntryPoint());    	
+                .authenticationEntryPoint(customBasicAuthenticationEntryPoint()).and()
+                .rememberMe(r -> r.alwaysRemember(true).key("this is test"));
+    	 		//for production, we need to put this key in a safe area instead of storing it in the code.
     }
-   
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
-
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
 
-    @Bean
+    @Override
+	protected UserDetailsService userDetailsService() {
+		return userDetailsService;
+	}
+
+	@Bean
     public AuthenticationEntryPoint customBasicAuthenticationEntryPoint() {
         return new AuthenticationEntryPoint() {
             private ObjectMapper objectMapper = new ObjectMapper();
