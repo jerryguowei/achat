@@ -1,6 +1,6 @@
 # [Achat](http://duduanan.com)
 
- [![GitHub license](https://img.shields.io/badge/license-MIT-blue)](https://github.com/facebook/react/blob/master/LICENSE)
+ [![GitHub license](https://img.shields.io/badge/license-MIT-blue)](https://github.com/jerryguowei/achat/blob/master/LICENSE)
  ![React](https://img.shields.io/badge/React-17.0.0-green.svg)
  ![Redux](https://img.shields.io/badge/Redux-4.0.5-green.svg)
  ![MySQL](https://img.shields.io/badge/MySQL-8.0.19-blue)
